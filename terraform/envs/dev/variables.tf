@@ -14,10 +14,10 @@ variable "azure_path" {
   description = "/public"
 }
 
-variable "azure_client_id" {
-  type        = string
-  description = "Azure ADアプリ(フェデレーテッドクレデンシャル用)のクライアントID"
-}
+#variable "azure_client_id" {
+#  type        = string
+#  description = "Azure ADアプリ(フェデレーテッドクレデンシャル用)のクライアントID"
+#}
 
 variable "azure_tenant_id" {
   type        = string
