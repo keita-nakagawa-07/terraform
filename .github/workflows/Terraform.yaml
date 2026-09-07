@@ -1,0 +1,49 @@
+name: Terraform
+
+on:
+  pull_request:
+    paths:
+      - 'terraform/**'
+  push:
+    branches: [main]
+    paths:
+      - 'terraform/**'
+
+permissions:
+  contents: read
+  id-token: write
+  pull-requests: write
+
+env:
+  WORKING_DIR: terraform/envs/dev
+  TF_VAR_project_id: default-155223
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.WORKING_DIR }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: 'projects/763406238295/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
+          service_account: 'terraform-deployer@default-155223.iam.gserviceaccount.com'
+
+      - uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Fmt Check
+        run: terraform fmt -check
+
+      - name: Terraform Plan
+        run: terraform plan -no-color -out=tfplan
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terraform apply -auto-approve tfplan
