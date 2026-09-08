@@ -1,11 +1,9 @@
-data "google_storage_transfer_project_service_account" "default" {
-  project = var.project_id
+variable "project_id" {
+  type    = string
+  default = "default-155223"
 }
 
-output "sts_service_account_email" {
-  value = data.google_storage_transfer_project_service_account.default.email
-}
-
-output "sts_service_account_subject_id" {
-  value = data.google_storage_transfer_project_service_account.default.subject_id
+variable "region" {
+  type    = string
+  default = "asia-northeast1"
 }
