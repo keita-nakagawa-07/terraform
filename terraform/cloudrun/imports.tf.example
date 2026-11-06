@@ -1,0 +1,25 @@
+# 既存の関数・SA・ロールを Terraform 管理下に取り込むための import ブロック。
+# 使い方: imports.tf にリネーム → terraform plan → terraform apply → 取り込み後は削除してよい。
+# 新規に作る場合はこのファイルは不要。
+
+import {
+  to = google_service_account.fn
+  id = "projects/${var.project_id}/serviceAccounts/${var.service_account_id}@${var.project_id}.iam.gserviceaccount.com"
+}
+
+import {
+  for_each = toset(var.service_account_project_roles)
+  to       = google_project_iam_member.fn[each.value]
+  id       = "${var.project_id} ${each.value} serviceAccount:${var.service_account_id}@${var.project_id}.iam.gserviceaccount.com"
+}
+
+import {
+  to = google_cloudfunctions2_function.fn
+  id = "projects/${var.project_id}/locations/${var.region}/functions/${var.function_name}"
+}
+
+# 既存で allUsers 公開している場合（allow_unauthenticated = true のとき）
+# import {
+#   to = google_cloud_run_service_iam_member.invoker["allUsers"]
+#   id = "projects/${var.project_id}/locations/${var.region}/services/${var.function_name} roles/run.invoker allUsers"
+# }
