@@ -1,0 +1,28 @@
+project_id    = "your-project-id"
+region        = "asia-northeast1"
+function_name = "my-function"
+
+runtime     = "python312"
+entry_point = "main"
+source_dir  = "src"
+
+available_memory   = "256M"
+timeout_seconds    = 60
+min_instance_count = 0
+max_instance_count = 3
+
+environment_variables = {
+  LOG_LEVEL = "info"
+}
+
+# secret_environment_variables = {
+#   API_KEY = { secret = "my-api-key" }
+# }
+
+allow_unauthenticated = false
+
+service_account_id = "my-function-sa"
+service_account_project_roles = [
+  "roles/logging.logWriter",
+  # "roles/datastore.user",
+]
