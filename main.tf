@@ -31,10 +31,3 @@ provider "google" {
   region  = var.region
 }
 
-# ---- 動作確認用リソース（不要なら削除） ----
-resource "google_storage_bucket" "smoke_test" {
-  name                        = "${var.project_id}-gha-smoke-test"
-  location                    = var.region
-  uniform_bucket_level_access = true
-  force_destroy               = true
-}
